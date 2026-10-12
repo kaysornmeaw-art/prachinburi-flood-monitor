@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>น้ำท่วมบ้านสร้าง</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&family=Prompt:wght@500;600&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f1f5f7;
+  --surface: #ffffff;
+  --fg: #12252e;
+  --muted: #566a73;
+  --line: #d3dde2;
+  --accent: #0d5a7a;
+  --accent-soft: #dcecf3;
+  --warn: #a85400;
+  --warn-soft: #fbead6;
+  --ok: #1d6b45;
+  --ok-soft: #dff1e7;
+  --font-display: "Prompt", "IBM Plex Sans Thai", "Noto Sans Thai", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e191e;
+    --surface: #152329;
+    --fg: #e4eef2;
+    --muted: #9bb0b9;
+    --line: #26383f;
+    --accent: #6cb8d6;
+    --accent-soft: #17323d;
+    --warn: #f0a85c;
+    --warn-soft: #3a2810;
+    --ok: #6fcf9b;
+    --ok-soft: #14301f;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e191e;
+  --surface: #152329;
+  --fg: #e4eef2;
+  --muted: #9bb0b9;
+  --line: #26383f;
+  --accent: #6cb8d6;
+  --accent-soft: #17323d;
+  --warn: #f0a85c;
+  --warn-soft: #3a2810;
+  --ok: #6fcf9b;
+  --ok-soft: #14301f;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  padding-inline: 16px;
+  padding-block: 20px 40px;
+}
+main { max-width: 720px; margin-inline: auto; display: flex; flex-direction: column; gap: 32px; }
+h1, h2 { font-family: var(--font-display); font-weight: 600; line-height: 1.3; margin: 0; text-wrap: balance; }
+h1 { font-size: 1.9rem; }
+h2 { font-size: 1.2rem; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.eyebrow { font-size: .8rem; letter-spacing: .06em; color: var(--muted); font-weight: 500; }
+header { display: flex; flex-direction: column; gap: 14px; }
+.status {
+  display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center;
+  background: var(--ok-soft); color: var(--ok);
+  border-radius: 8px; padding: 10px 14px; font-weight: 500; font-size: .95rem;
+}
+.status small { color: var(--muted); font-weight: 400; font-size: .85rem; }
+.lede { color: var(--muted); max-width: 62ch; }
+.figures { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+.fig { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; min-width: 0; }
+.fig b { display: block; font-family: var(--font-display); font-size: 1.7rem; font-weight: 600; line-height: 1.2; font-variant-numeric: tabular-nums; color: var(--accent); }
+.fig span { display: block; font-size: .88rem; line-height: 1.45; margin-top: 4px; }
+.fig i { display: block; font-style: normal; font-size: .75rem; color: var(--muted); margin-top: 6px; }
+section { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.timeline li {
+  display: grid; grid-template-columns: 5.2rem minmax(0, 1fr); gap: 4px 14px;
+  padding-block: 12px; border-top: 1px solid var(--line);
+}
+.timeline li:last-child { border-bottom: 1px solid var(--line); }
+.date { font-family: var(--font-display); font-weight: 500; font-size: .95rem; font-variant-numeric: tabular-nums; }
+.pill { display: inline-block; font-size: .72rem; font-weight: 600; padding: 1px 8px; border-radius: 99px; margin-right: 6px; vertical-align: 1px; }
+.pill.bad { background: var(--warn-soft); color: var(--warn); }
+.pill.good { background: var(--ok-soft); color: var(--ok); }
+.mapbox { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+.mapbox svg { display: block; width: 100%; height: auto; max-width: 100%; }
+.mapnote { font-size: .82rem; color: var(--muted); margin-top: 8px; }
+.places { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.place { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.place strong { font-weight: 600; }
+.place p { font-size: .9rem; color: var(--muted); }
+.row { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: .92rem; }
+.tel { font-variant-numeric: tabular-nums; font-weight: 500; user-select: all; }
+button.copy {
+  font: inherit; font-size: .8rem; color: var(--accent); background: var(--accent-soft);
+  border: 0; border-radius: 6px; padding: 3px 10px; cursor: pointer;
+}
+.list { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 6px; }
+.sources { font-size: .88rem; color: var(--muted); }
+.sources ul { margin: 6px 0 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 3px; }
+footer { font-size: .82rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 14px; }
+.m-grid { stroke: var(--line); stroke-width: 1; }
+.m-bg { fill: var(--accent-soft); }
+.m-line { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 5 4; fill: none; }
+.m-dot-a { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
+.m-dot-w { fill: var(--warn); stroke: var(--surface); stroke-width: 2; }
+.m-t { fill: var(--fg); font-family: var(--font-body); font-size: 12px; font-weight: 500; }
+.m-s { fill: var(--muted); font-family: var(--font-body); font-size: 10.5px; }
+.m-bar { stroke: var(--fg); stroke-width: 2; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">อ.บ้านสร้าง จ.ปราจีนบุรี · อัปเดต 12 ต.ค. 2569</p>
+    <h1>น้ำท่วมบ้านสร้าง</h1>
+    <div class="status">
+      <span>แนวโน้มดีขึ้น</span>
+      <small>ข่าวล่าสุดที่พบ: 8 ต.ค. 2569 ยังไม่มีระดับน้ำรายวันของวันนี้</small>
+    </div>
+    <p class="lede">น้ำเอ่อล้นตลิ่งตั้งแต่ปลายเดือนกันยายน เทศบาลตำบลบ้านสร้างได้รับผลกระทบเกือบทั้งหมด ถนนจากตัวเมืองปราจีนบุรีเข้าอำเภอเคยใช้ลำเลียงของตามปกติไม่ได้ ข้อมูลด้านล่างรวบรวมจากข่าวช่วง 29 ก.ย. ถึง 8 ต.ค.</p>
+  </header>
+
+  <section aria-labelledby="h-fig">
+    <h2 id="h-fig">ตัวเลขสำคัญ</h2>
+    <div class="figures">
+      <div class="fig"><b>60,317</b><span>ครัวเรือนที่ได้รับผลกระทบทั้งจังหวัด</span><i>ณ 8 ต.ค. 07.00 น.</i></div>
+      <div class="fig"><b>7 / 65</b><span>อำเภอ / ตำบล ที่ถูกน้ำท่วม</span><i>ณ 8 ต.ค.</i></div>
+      <div class="fig"><b>7 ราย</b><span>ผู้เสียชีวิตทั้งจังหวัด</span><i>ณ 2 ต.ค.</i></div>
+      <div class="fig"><b>96,806 ไร่</b><span>นาข้าวที่ได้รับความเสียหาย</span><i>ณ 8 ต.ค.</i></div>
+      <div class="fig"><b>12 จุด</b><span>ทางหลวงในปราจีนบุรีที่ผ่านไม่ได้</span><i>ณ 7 ต.ค. (ทั่วประเทศ 21 จุด)</i></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-time">
+    <h2 id="h-time">ลำดับเหตุการณ์</h2>
+    <ol class="timeline">
+      <li>
+        <span class="date">29 ก.ย.</span>
+        <p><span class="pill bad">เตือนภัย</span>ปภ. ส่งข้อความเตือนว่าน้ำใน อ.เมืองปราจีนบุรี อ.ประจันตคาม และอ.บ้านสร้างอาจสูงขึ้นอีกราว 50 ซม. ให้ผู้อยู่พื้นที่เสี่ยงอพยพไปศูนย์พักพิง</p>
+      </li>
+      <li>
+        <span class="date">2 ต.ค.</span>
+        <p><span class="pill bad">วิกฤต</span>บ้านสร้างท่วมทุกตำบล รับมวลน้ำหนักสุดในจังหวัด ทั้งจังหวัดกระทบ 46,160 ครัวเรือน และประกาศเป็นเขตประสบสาธารณภัย</p>
+      </li>
+      <li>
+        <span class="date">4 ต.ค.</span>
+        <p><span class="pill bad">น้ำขึ้น</span>ระดับน้ำสูงขึ้นอีก 15 ซม. ถนนจากตัวเมืองปราจีนบุรีลำเลียงสิ่งของเข้าไปช่วยตามปกติไม่ได้</p>
+      </li>
+      <li>
+        <span class="date">7 ต.ค.</span>
+        <p><span class="pill bad">อพยพซ้ำ</span>ชาวบ้านจาก ต.บางแตน 145 คน ต้องย้ายเป็นครั้งที่สอง จากศูนย์พักพิงโรงเรียนศรีรักษ์ราษฎร์บำรุงไปวัดแหลมไผ่ อ.เมือง ห่างกันกว่า 40 กม. รพ.อภัยภูเบศรย้ายผู้ป่วยทั้งหมด</p>
+      </li>
+      <li>
+        <span class="date">8 ต.ค.</span>
+        <p><span class="pill good">เริ่มคลี่คลาย</span>รองผู้ว่าฯ ที่รักษาราชการแทนผู้ว่าฯ แจ้งว่าหลายอำเภอดีขึ้น ผู้ได้รับผลกระทบทั้งจังหวัดเพิ่มเป็น 60,317 ครัวเรือน นายอำเภอบ้านสร้างถูกย้ายไปช่วยราชการ 7 ต.ค. ถึง 5 พ.ย.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="h-map">
+    <h2 id="h-map">แผนที่จุดสำคัญ</h2>
+    <div class="mapbox">
+      <svg viewBox="0 0 360 300" role="img" aria-label="แผนผังตำแหน่งที่ว่าการอำเภอและโรงพยาบาลบ้านสร้าง กับโรงเรียนศรีรักษ์ราษฎร์บำรุง ห่างกันราว 12 กิโลเมตร">
+        <rect class="m-bg" x="0" y="0" width="360" height="300" rx="6"/>
+        <line class="m-grid" x1="0" y1="100" x2="360" y2="100"/>
+        <line class="m-grid" x1="0" y1="200" x2="360" y2="200"/>
+        <line class="m-grid" x1="120" y1="0" x2="120" y2="300"/>
+        <line class="m-grid" x1="240" y1="0" x2="240" y2="300"/>
+        <path class="m-line" d="M110 250 L207 64"/>
+        <text class="m-s" x="168" y="170" text-anchor="start">ห่างราว 12 กม.</text>
+        <circle class="m-dot-w" cx="110" cy="250" r="8"/>
+        <text class="m-t" x="124" y="248">โรงเรียนศรีรักษ์ราษฎร์บำรุง</text>
+        <text class="m-s" x="124" y="264">ต.บางแตน · เคยเป็นศูนย์พักพิง</text>
+        <circle class="m-dot-a" cx="207" cy="64" r="8"/>
+        <text class="m-t" x="150" y="38" text-anchor="start">ที่ว่าการอำเภอ และ รพ.บ้านสร้าง</text>
+        <text class="m-s" x="150" y="52">ห่างกันราว 200 ม. จึงรวมเป็นจุดเดียว</text>
+        <text class="m-t" x="20" y="30">เหนือ ↑</text>
+        <line class="m-bar" x1="20" y1="280" x2="54" y2="280"/>
+        <text class="m-s" x="60" y="284">2 กม.</text>
+      </svg>
+      <p class="mapnote">แผนผังตามพิกัดจริงในมาตราส่วนเดียวกัน ไม่ใช่แนวน้ำท่วมและไม่แสดงถนน เปิดแผนที่จริงจากลิงก์ในแต่ละรายการด้านล่าง</p>
+    </div>
+
+    <ul class="places">
+      <li class="place">
+        <strong>ที่ว่าการอำเภอบ้านสร้าง</strong>
+        <p>ศูนย์ประสานงานระดับอำเภอ เปิดจันทร์ถึงศุกร์ 08.30–16.30 น.</p>
+        <div class="row"><span class="tel" id="t1">037 271 225</span><button class="copy" type="button" data-copy="t1">คัดลอก</button><a href="https://maps.google.com/?cid=3009753846804299797" target="_blank" rel="noopener">เปิดใน Google Maps</a></div>
+      </li>
+      <li class="place">
+        <strong>โรงพยาบาลบ้านสร้าง</strong>
+        <p>เปิด 24 ชั่วโมง ควรโทรเช็กสถานการณ์และเส้นทางก่อนเดินทาง</p>
+        <div class="row"><span class="tel" id="t2">037 271 238</span><button class="copy" type="button" data-copy="t2">คัดลอก</button><a href="https://maps.google.com/?cid=18030764153493908602" target="_blank" rel="noopener">เปิดใน Google Maps</a></div>
+      </li>
+      <li class="place">
+        <strong>โรงเรียนศรีรักษ์ราษฎร์บำรุง</strong>
+        <p>เคยใช้เป็นศูนย์พักพิง แต่น้ำสูงจนผู้อพยพบางส่วนต้องย้ายอีกครั้ง โทรถามก่อนว่ายังเปิดรับหรือไม่</p>
+        <div class="row"><span class="tel" id="t3">037 295 222</span><button class="copy" type="button" data-copy="t3">คัดลอก</button><a href="https://maps.google.com/?cid=16244596410769756498" target="_blank" rel="noopener">เปิดใน Google Maps</a></div>
+      </li>
+      <li class="place">
+        <strong>สายด่วน ปภ.</strong>
+        <p>กรมป้องกันและบรรเทาสาธารณภัย แจ้งเหตุและสอบถามสถานการณ์</p>
+        <div class="row"><span class="tel" id="t4">1784</span><button class="copy" type="button" data-copy="t4">คัดลอก</button></div>
+      </li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="h-help">
+    <h2 id="h-help">เส้นทางและเงินเยียวยา</h2>
+    <ul class="list">
+      <li>ทางหลวงใน 18 จังหวัดผ่านไม่ได้ 21 จุดเมื่อ 7 ต.ค. อยู่ในปราจีนบุรีมากที่สุด 12 จุด สถานะเปลี่ยนเร็ว ตรวจก่อนออกเดินทางทุกครั้ง</li>
+      <li>เงินเยียวยาน้ำท่วม 2569 เบื้องต้นครัวเรือนละ 9,000 บาท ยื่นคำร้องได้ทางแอปฯ "ทางรัฐ" หรือที่องค์กรปกครองส่วนท้องถิ่น (เทศบาล หรือ อบต.)</li>
+    </ul>
+  </section>
+
+  <section class="sources" aria-labelledby="h-src">
+    <h2 id="h-src">แหล่งข้อมูล</h2>
+    <ul>
+      <li><a href="https://www.bangkokbiznews.com/news/1254157" target="_blank" rel="noopener">Bangkok Biznews · ปภ. เตือนภัย 29 ก.ย.</a></li>
+      <li><a href="https://matichon.co.th/region/news_5917140" target="_blank" rel="noopener">มติชน · สถานการณ์ 2 ต.ค.</a></li>
+      <li><a href="https://www.thaipbs.or.th/news/content/559145" target="_blank" rel="noopener">Thai PBS · น้ำเพิ่ม 15 ซม. (4 ต.ค.)</a></li>
+      <li><a href="https://www.thaipbs.or.th/news/content/559273" target="_blank" rel="noopener">Thai PBS · อพยพครั้งที่สอง (7 ต.ค.)</a></li>
+      <li><a href="https://www.thaipbs.or.th/news/content/559142" target="_blank" rel="noopener">Thai PBS · เช็กเส้นทาง 7 ต.ค.</a></li>
+      <li><a href="https://www.naewna.com/n/?p=103636" target="_blank" rel="noopener">แนวหน้า · สรุปสถานการณ์ 8 ต.ค.</a></li>
+      <li><a href="https://www.banmuang.co.th/news/region/493666" target="_blank" rel="noopener">บ้านเมือง · สรุปความเสียหาย 8 ต.ค.</a></li>
+      <li><a href="https://www.thaipbs.or.th/program/ThaiPBSNews/watch/etllfq9kgcbr" target="_blank" rel="noopener">Thai PBS · เงินเยียวยา 2569</a></li>
+    </ul>
+  </section>
+
+  <footer>รวบรวมจากข่าว ไม่ใช่ประกาศทางการ ตัวเลขอาจเปลี่ยนตามรายงานใหม่ ตรวจสถานะล่าสุดกับ ปภ. หรือจังหวัดปราจีนบุรีก่อนตัดสินใจเดินทางหรืออพยพ</footer>
+</main>
+
+<script>
+(function () {
+  var buttons = document.querySelectorAll("button.copy");
+  buttons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var el = document.getElementById(btn.getAttribute("data-copy"));
+      var text = el.textContent.trim();
+      var done = function () {
+        var old = btn.textContent;
+        btn.textContent = "คัดลอกแล้ว";
+        setTimeout(function () { btn.textContent = old; }, 1500);
+      };
+      var fallback = function () {
+        try {
+          var r = document.createRange();
+          r.selectNodeContents(el);
+          var s = window.getSelection();
+          s.removeAllRanges();
+          s.addRange(r);
+        } catch (e) {}
+      };
+      try {
+        navigator.clipboard.writeText(text).then(done, fallback);
+      } catch (e) {
+        fallback();
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
